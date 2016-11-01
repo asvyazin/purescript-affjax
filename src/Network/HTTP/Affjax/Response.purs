@@ -8,7 +8,6 @@ import Prelude
 
 import Data.Argonaut.Core (Json())
 import Data.ArrayBuffer.Types as A
-import Data.Either (Either(..))
 import Data.Foreign (Foreign(), F(), readString, unsafeReadTagged)
 import Data.Maybe (Maybe(..))
 import Data.MediaType (MediaType())
@@ -72,7 +71,7 @@ instance responsableDocument :: Respondable Document where
 
 instance responsableForeign :: Respondable Foreign where
   responseType = Tuple Nothing JSONResponse
-  fromResponse = Right <<< unsafeCoerce
+  fromResponse = pure <<< unsafeCoerce
 
 instance responsableString :: Respondable String where
   responseType = Tuple Nothing StringResponse
@@ -80,7 +79,7 @@ instance responsableString :: Respondable String where
 
 instance responsableUnit :: Respondable Unit where
   responseType = Tuple Nothing StringResponse
-  fromResponse = const (Right unit)
+  fromResponse = const (pure unit)
 
 instance responsableArrayBuffer :: Respondable A.ArrayBuffer where
   responseType = Tuple Nothing ArrayBufferResponse
@@ -88,4 +87,4 @@ instance responsableArrayBuffer :: Respondable A.ArrayBuffer where
 
 instance responsableJson :: Respondable Json where
   responseType = Tuple (Just applicationJSON) JSONResponse
-  fromResponse = Right <<< unsafeCoerce
+  fromResponse = pure <<< unsafeCoerce
